@@ -33,6 +33,8 @@ There's also some work on point cloud matching for joined objects and mesh align
 Load test scene from data folder, select objects, press Ctrl+D to debug. Use F3-Reload scripts to reload.
 It searches mesh soup for the provided template mesh and creates its scaled/rotated instances.
 
+[![](http://img.youtube.com/vi/WyN3GiHWCOY/hqdefault.jpg)](https://youtu.be/WyN3GiHWCOY)
+
 ### References
 
 * https://github.com/NazzarenoGiannelli/coordiknight similar plugin, pastes cubes
