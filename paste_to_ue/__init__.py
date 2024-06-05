@@ -90,9 +90,8 @@ class MeshSeparation(bpy.types.Operator):
 
             scale = (b[1] - a[1]).length / (b[0] - a[0]).length
             r.transpose()
-            r[0].xyz *= scale
-            r[1].xyz *= scale
-            r[2].xyz *= scale
+            for i in range(3):
+                r[i].xyz *= scale
             r.transpose()
 
             snap = obj.matrix_world.inverted() @ a[0]
