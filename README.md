@@ -37,6 +37,7 @@ It searches mesh soup for the provided template mesh and creates its scaled/rota
 
 ### References
 
+* https://github.com/joric/io_scene_b3d
 * https://github.com/NazzarenoGiannelli/coordiknight similar plugin, pastes cubes
 * https://www.sidefx.com/forum/topic/58153/ 3 point align of 2 similar meshes (like in Maya)
 * https://github.com/egtwobits/mesh_mesh_align_plus
