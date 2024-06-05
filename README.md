@@ -29,8 +29,9 @@ You can apply scale for all selected objects in UE without moving them by changi
 
 ### Mesh Separation
 
-There's also some work on point cloud matching for joined objects and mesh align but it's WIP.
+There's also some work on point cloud matching for joined objects and mesh align.
 Load test scene from data folder, select objects, press Ctrl+D to debug. Use F3-Reload scripts to reload.
+It searches mesh soup for the provided template mesh and creates its scaled/rotated instances.
 
 ### References
 

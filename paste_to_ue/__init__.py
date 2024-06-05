@@ -23,7 +23,7 @@ class MeshSeparation(bpy.types.Operator):
 
     delta: bpy.props.StringProperty(name="delta", default="0.1")
 
-    # WIP: mesh separation for template vs point cloud
+    # mesh separation, template vs point cloud
     def execute(self, context: bpy.context):
         import sys,imp
 
@@ -39,7 +39,6 @@ class MeshSeparation(bpy.types.Operator):
 
             points = []
             bpy.context.view_layer.objects.active = o
-            active = bpy.context.object.name
 
             #for v in o.data.vertices:
             #    points.append(v.co)
@@ -60,59 +59,48 @@ class MeshSeparation(bpy.types.Operator):
 
         self.report({'INFO'}, f'Collected points template:{n}, cloud: {m}, ratio: ({m/n})')
 
-        #print(template, cloud[:n])
+        source_index = 0 if len(objects[0])<len(objects[1]) else 1
+        template_obj = bpy.context.selected_objects[source_index]
 
         ofs = 0
         while ofs+n <= m:
-            loc = cloud[ofs]
+            obj = bpy.data.objects.new(name=template_obj.name+'_instance', object_data=template_obj.data)
+            #obj = bpy.data.objects.new(name=template_obj.name+'_empty', object_data = None)
+            bpy.context.collection.objects.link(obj)
 
             source_points = template[:3]
-            target_points = [cloud[ofs+i]-loc for i in range(3)]
+            target_points = cloud[ofs:ofs+3]
 
-            source_distance = (source_points[1] - source_points[0]).length
-            target_distance = (target_points[1] - target_points[0]).length
-            scaling_factor = target_distance / source_distance
-            scale = ([scaling_factor]*3)
+            a,b,c = [[source_points[i],target_points[i]] for i in range(3)]
+            p = obj.location.copy(), a[1]
 
-            source_vector = source_points[0].copy() # normalize messes up original if not copied
-            target_vector = target_points[0].copy()
+            def calc_matrix(i):
+                x = (b[i] - a[i]).normalized()
+                z = x.cross(c[i] - a[i]).normalized()
+                y = z.cross(x).normalized()
+                w = p[i].copy()
+                w.resize_4d()
+                m = Matrix()
+                m[0], m[1], m[2], m[3] = x.resized(4), y.resized(4), z.resized(4), w
+                m.transpose()
+                return m
 
-            source_vector.normalize()
-            target_vector.normalize()
+            dest, src = calc_matrix(0), calc_matrix(1)
+            r = src @ dest.inverted() @ obj.matrix_world.copy()
 
-            #rotation_quat = source_vector.rotation_difference(target_vector)
-            rotation_quat = target_vector.rotation_difference(source_vector)
+            scale = (b[1] - a[1]).length / (b[0] - a[0]).length
+            r.transpose()
+            r[0].xyz *= scale
+            r[1].xyz *= scale
+            r[2].xyz *= scale
+            r.transpose()
 
-            add_instance = True
-            if add_instance:
-
-                # does not rotate properly. do we need centroids?
-
-                source_object = bpy.context.selected_objects[0 if len(objects[0])<len(objects[1]) else 1]
-                instance_object = bpy.data.objects.new(name='InstanceObject', object_data=source_object.data)
-                bpy.context.collection.objects.link(instance_object)
-
-                instance_object.location = loc
-                instance_object.rotation_quaternion = rotation_quat
-                instance_object.scale = scale
-
-                #instance_object.matrix_world = Matrix.Translation(loc) @ rotation_quat.to_matrix().to_4x4() @ Matrix.Scale(scaling_factor,4)
-
-                bpy.context.view_layer.update()
-
-            else:
-
-                bpy.ops.object.empty_add(location = loc, rotation=rotation_quat.to_euler(), scale = scale)
-
+            snap = obj.matrix_world.inverted() @ a[0]
+            obj.matrix_world = Matrix().Translation(r.to_translation() - r @ snap) @ r
 
             ofs += n
 
-        #import json
-        #data = {'template':[(v.x,v.y,v.z)for v in template],'cloud':[(v.x,v.y,v.z)for v in cloud]};
-        #json.dump(data, open('c:/temp/out.json','w'), indent=2)
-
         return {'FINISHED'}
-
 
 def copy_to_clipboard(self, blueprint, scale):
 
