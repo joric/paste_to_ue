@@ -2,7 +2,7 @@ bl_info = {
     "name": "paste_to_ue",
     "author": "joric",
     "version": (0, 1),
-    "blender": (2, 8, 0),
+    "blender": (3, 6, 0),
     "category": "Object",
     "location": "View 3D > Object",
     "description": "Copy transformations of objects to paste to UE",
