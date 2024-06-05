@@ -18,10 +18,10 @@ from mathutils import *
 
 class MeshSeparation(bpy.types.Operator):
     bl_idname = "object.debug_macro_paste_to_ue"
-    bl_label = "Debug Macro 2"
+    bl_label = "Mesh Separation"
     bl_options = {'REGISTER', 'UNDO'}
 
-    delta: bpy.props.StringProperty(name="delta", default="0.1")
+    delta: bpy.props.StringProperty(name="Delta (unused)", default="0.1")
 
     # mesh separation, template vs point cloud
     def execute(self, context: bpy.context):
@@ -137,7 +137,7 @@ class PasteToUE(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     blueprint: bpy.props.StringProperty(name="Path to Blueprint", default="/Game/Items/BP_Item")
-    scale: bpy.props.FloatProperty(name="Scale (0 to skip)", default=0)
+    scale: bpy.props.FloatProperty(name="Custom Scale (0 to skip)", default=0)
 
     def execute(self, context):
         copy_to_clipboard(self, self.blueprint, self.scale)
