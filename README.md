@@ -1,6 +1,6 @@
 ## Paste to UE
 
-Blender plugin to copy object position (and transformations) from Blender to UE as blueprints
+Blender plugin to copy objects position (and transformations) from Blender to UE as blueprints
 
 ### Installation
 
