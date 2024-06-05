@@ -12,7 +12,9 @@ bl_info = {
 addon_keymaps = []
 
 import bpy
-from math import*
+from math import *
+import mathutils
+from mathutils import *
 
 class MeshSeparation(bpy.types.Operator):
     bl_idname = "object.debug_macro_paste_to_ue"
@@ -21,7 +23,7 @@ class MeshSeparation(bpy.types.Operator):
 
     delta: bpy.props.StringProperty(name="delta", default="0.1")
 
-    # WIP: mesh separation for 
+    # WIP: mesh separation for template vs point cloud
     def execute(self, context: bpy.context):
         import sys,imp
 
@@ -30,18 +32,24 @@ class MeshSeparation(bpy.types.Operator):
 
         objects = []
 
-        #transform values for every selected object
+        # collect points for every selected object
         for o in bpy.context.selected_objects:
             if o.type != "MESH":
                 continue
+
             points = []
             bpy.context.view_layer.objects.active = o
             active = bpy.context.object.name
-            for v in o.data.vertices:
-                points.append(v.co)
-            objects.append(points)
 
-        #self.report({'INFO'}, f'Collected points {[len(p) for p in objects]}')
+            #for v in o.data.vertices:
+            #    points.append(v.co)
+
+            # need to collect points from face data here, or it doesn't match
+            for face in o.data.polygons:
+                for idx in face.vertices:
+                    points.append( o.data.vertices[idx].co )
+
+            objects.append(points)
 
         if len(objects)<2 or len(objects[0])<3 or len(objects[1])<3:
             self.report({'INFO'}, f'Too few objects selected, need two (template and cloud) with 3 points each, minimum.')
@@ -50,15 +58,53 @@ class MeshSeparation(bpy.types.Operator):
         template, cloud = sorted(objects,key=len)[:2]
         n,m = map(len,(template,cloud))
 
-        self.report({'INFO'}, f'Collected points template:{n}, cloud: {m} ({m/n})')
+        self.report({'INFO'}, f'Collected points template:{n}, cloud: {m}, ratio: ({m/n})')
 
-        # calculate distances from first point to other points, sort distances
-        print(template, cloud[:n])
+        #print(template, cloud[:n])
 
         ofs = 0
         while ofs+n <= m:
             loc = cloud[ofs]
-            #bpy.ops.object.empty_add(location=loc)
+
+            source_points = template[:3]
+            target_points = [cloud[ofs+i]-loc for i in range(3)]
+
+            source_distance = (source_points[1] - source_points[0]).length
+            target_distance = (target_points[1] - target_points[0]).length
+            scaling_factor = target_distance / source_distance
+            scale = ([scaling_factor]*3)
+
+            source_vector = source_points[0].copy() # normalize messes up original if not copied
+            target_vector = target_points[0].copy()
+
+            source_vector.normalize()
+            target_vector.normalize()
+
+            rotation_quat = source_vector.rotation_difference(target_vector)
+            #rotation_quat = target_vector.rotation_difference(source_vector)
+
+            add_instance = True
+            if add_instance:
+
+                # does not rotate properly. do we need centroids?
+
+                source_object = bpy.context.selected_objects[0 if len(objects[0])<len(objects[1]) else 1]
+                instance_object = bpy.data.objects.new(name='InstanceObject', object_data=source_object.data)
+                bpy.context.collection.objects.link(instance_object)
+
+                instance_object.location = loc
+                instance_object.rotation_quaternion = rotation_quat
+                instance_object.scale = scale
+
+                #instance_object.matrix_world = Matrix.Translation(loc) @ rotation_quat.to_matrix().to_4x4() @ Matrix.Scale(scaling_factor,4)
+
+                bpy.context.view_layer.update()
+
+            else:
+
+                bpy.ops.object.empty_add(location = loc, rotation=rotation_quat.to_euler(), scale = scale)
+
+
             ofs += n
 
         #import json
@@ -66,6 +112,7 @@ class MeshSeparation(bpy.types.Operator):
         #json.dump(data, open('c:/temp/out.json','w'), indent=2)
 
         return {'FINISHED'}
+
 
 def copy_to_clipboard(self, blueprint, scale):
 

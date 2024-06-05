@@ -30,6 +30,7 @@ You can uniformly scale objects in UE by selecting all objects and changing scal
 ### Mesh Separation
 
 There's also some work on point cloud matching for joined objects and mesh align but it's WIP.
+Load test scene from data folder, select objects, press Ctrl+D to debug.
 
 ### References
 
