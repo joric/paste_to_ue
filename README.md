@@ -20,14 +20,13 @@ add("/Game/Items/BP_Coin",(1,1,1),(2,2,2)).set_actor_scale3d(unreal.Vector{3,3,3
 ```
 
 Paste clipboard to the UE5 "Python" window (not REPL), it allows multiline text.
-
-You can specify blueprint and scale in the popup menu.
-Scale needs to be different from 0 to apply scene scale, use with caution.
-You can apply scale for all selected objects in UE without moving them by changing scale value in properties.
+You can also specify blueprint and scale in the popup menu.
+Scale needs to be bigger than 0 to apply scene scale, use with caution.
+You can also apply scale for all selected objects in UE without moving them by changing scale value in properties.
 
 ### Mesh Separation
 
-There's also some work on point cloud matching for joined objects and mesh align.
+There's some work on point cloud matching for joined objects and mesh align.
 Select any objects in the scene (the smallest will be a template, the next smallest will be searched),
 press Ctrl+Shift+D. It will find and create template instances with matching scaling/rotation.
 Then you can select them with Ctrl+Shift+C and paste to UE.
