@@ -2,7 +2,7 @@ bl_info = {
     "name": "paste_to_ue",
     "author": "joric",
     "version": (0, 1),
-    "blender": (2, 9, 0),
+    "blender": (3, 6, 0),
     "category": "Object",
     "location": "View 3D > Object",
     "description": "Copy transformations of objects to paste to UE",
@@ -136,8 +136,8 @@ class PasteToUE(bpy.types.Operator):
     bl_label = "Paste to UE"
     bl_options = {'REGISTER', 'UNDO'}
 
-    blueprint: bpy.props.StringProperty(name="blueprint", default="/Game/Items/BP_Item")
-    scale: bpy.props.FloatProperty(name="scale", default=0)
+    blueprint: bpy.props.StringProperty(name="Path to Blueprint", default="/Game/Items/BP_Item")
+    scale: bpy.props.FloatProperty(name="Scale (0 to skip)", default=0)
 
     def execute(self, context):
         copy_to_clipboard(self, self.blueprint, self.scale)
