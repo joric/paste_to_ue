@@ -31,6 +31,8 @@ Select any objects in the scene (the smallest will be a template, the next small
 press Ctrl+Shift+D. It will find and create template instances with matching scaling/rotation.
 Then you can select them, press Ctrl+Shift+C, and paste them to UE.
 
+#### Video
+
 [![](http://img.youtube.com/vi/WyN3GiHWCOY/hqdefault.jpg)](https://youtu.be/WyN3GiHWCOY)
 
 ### References
