@@ -4,13 +4,11 @@ Blender plugin to copy objects position (and transformations) from Blender to UE
 
 ### Installation
 
-Download zip file from the [releases](https://github.com/joric/paste_to_ue/releases) section, install it as blender plugin.
+Download repository as a zip file, install it as blender plugin.
 
 ### Usage
 
-Select objects, press Ctrl+Shift+C to copy objects data. You also can click "Object > Paste to UE" in menu.
-
-Clipboard Format:
+Select objects, press Ctrl+Shift+C to copy objects data. You also can click "Object > Paste to UE" in menu. Clipboard Format:
 
 ```python
 eli,eal=unreal.EditorLevelLibrary,unreal.EditorAssetLibrary
@@ -21,7 +19,7 @@ add("/Game/Items/BP_Coin",(1,1,1),(2,2,2)).set_actor_scale3d(unreal.Vector{3,3,3
 # ...
 ```
 
-Paste it to UE5 "Python" window (not REPL), it allows multiline text.
+Paste clipboard to the UE5 "Python" window (not REPL), it allows multiline text.
 
 You can specify blueprint and scale in the popup menu.
 Scale needs to be different from 0 to apply scene scale, use with caution.
@@ -30,8 +28,9 @@ You can apply scale for all selected objects in UE without moving them by changi
 ### Mesh Separation
 
 There's also some work on point cloud matching for joined objects and mesh align.
-Load test scene from data folder, select objects, press Ctrl+D to debug. Use F3-Reload scripts to reload.
-It searches mesh soup for the provided template mesh and creates its scaled/rotated instances.
+Select any objects in the scene (the smallest will be a template, the next smallest will be searched),
+press Ctrl+Shift+D. It will find and create template instances with matching scaling/rotation.
+Then you can select them with Ctrl+Shift+C and paste to UE.
 
 [![](http://img.youtube.com/vi/WyN3GiHWCOY/hqdefault.jpg)](https://youtu.be/WyN3GiHWCOY)
 
