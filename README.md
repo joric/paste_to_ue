@@ -4,7 +4,7 @@ Blender plugin to copy objects position (and transformations) from Blender to UE
 
 ### Installation
 
-Download repository as a zip file, install it as blender plugin.
+Download repository from the [releases](../releases) section, install it as blender plugin.
 
 ### Usage
 
