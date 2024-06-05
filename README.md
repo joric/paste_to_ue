@@ -4,7 +4,7 @@ Blender plugin to copy objects from Blender to UE as blueprints
 
 ### Installation
 
-Download zipped master branch from the repository, install it as blender plugin.
+Download zip file from the [releases](https://github.com/joric/paste_to_ue/releases) section, install it as blender plugin.
 
 ### Usage
 
