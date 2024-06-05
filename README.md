@@ -15,10 +15,9 @@ Clipboard Format:
 ```python
 eli,eal=unreal.EditorLevelLibrary,unreal.EditorAssetLibrary
 load=lambda bp:eal.load_blueprint_class(eal.load_asset(bp).get_outer().get_full_name())
-add=lambda bp,c:eli.spawn_actor_from_class(load(bp),unreal.Vector(*c),unreal.Rotator(0,0,0))
-add("/Game/Items/BP_Coin",(23.29,76.29,-32.83))
-add("/Game/Items/BP_Coin",(23.29,77.27,-32.57))
-add("/Game/Items/BP_Coin",(1,1,1)).set_actor_scale3d(unreal.Vector{2,2,2}) # optional
+add=lambda bp,v,r:eli.spawn_actor_from_class(load(bp),unreal.Vector(*v),unreal.Rotator(*r))
+add("/Game/Items/BP_Item",(1,1,1),(2,2,2))
+add("/Game/Items/BP_Coin",(1,1,1),(2,2,2)).set_actor_scale3d(unreal.Vector{3,3,3}) # optional
 # ...
 ```
 
