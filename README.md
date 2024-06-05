@@ -25,6 +25,7 @@ Paste it to UE5 "Python" window (not REPL), it allows multiline text.
 
 You can specify blueprint and scale in the popup menu.
 Scale needs to be different from 0 to apply scene scale, use with caution.
+You can uniformly scale objects in UE by selecting objects and changing scale in properties.
 
 ### Mesh Separation
 
