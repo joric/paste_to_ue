@@ -80,8 +80,8 @@ class MeshSeparation(bpy.types.Operator):
             source_vector.normalize()
             target_vector.normalize()
 
-            rotation_quat = source_vector.rotation_difference(target_vector)
-            #rotation_quat = target_vector.rotation_difference(source_vector)
+            #rotation_quat = source_vector.rotation_difference(target_vector)
+            rotation_quat = target_vector.rotation_difference(source_vector)
 
             add_instance = True
             if add_instance:
