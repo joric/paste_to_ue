@@ -137,7 +137,7 @@ class PasteToUE(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     blueprint: bpy.props.StringProperty(name="Path to Blueprint", default="/Game/Items/BP_Item")
-    scale: bpy.props.FloatProperty(name="Scale (0 to skip)", default=0)
+    scale: bpy.props.FloatProperty(name="Scale (0 is default)", default=0)
 
     def execute(self, context):
         copy_to_clipboard(self, self.blueprint, self.scale)
