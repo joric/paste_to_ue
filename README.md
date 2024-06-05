@@ -29,7 +29,7 @@ You can also apply scale for all selected objects in UE without moving them by c
 There's some work on point cloud matching for joined objects and mesh align.
 Select any objects in the scene (the smallest will be a template, the next smallest will be searched),
 press Ctrl+Shift+D. It will find and create template instances with matching scaling/rotation.
-Then you can select them with Ctrl+Shift+C and paste to UE.
+Then you can select them, press Ctrl+Shift+C, and paste to UE.
 
 [![](http://img.youtube.com/vi/WyN3GiHWCOY/hqdefault.jpg)](https://youtu.be/WyN3GiHWCOY)
 
