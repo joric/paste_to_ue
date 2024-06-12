@@ -43,7 +43,7 @@ You can also apply scale for all selected objects in UE without moving them by c
 
 #### Video
 
-[![](http://img.youtube.com/vi/WyN3GiHWCOY/hqdefault.jpg)](https://youtu.be/WyN3GiHWCOY)
+[![](http://img.youtube.com/vi/lSLK26Li14w/hqdefault.jpg)](https://youtu.be/lSLK26Li14w)
 
 ### References
 
