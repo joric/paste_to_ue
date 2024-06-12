@@ -19,7 +19,7 @@ It will find and create template instances with matching scaling/rotation.
 Then you can select them, press Ctrl+Shift+C, and paste their transformations to UE.
 
 Object matching algorithm currently uses weighted distances between a few points.
-Adjust delta to large value if objects don't match the template (e.g. set to 1).
+Adjust delta to large value if objects don't match the templates (e.g. set to 1).
 If it doesn't fix it, try separating large mesh into smaller meshes by template type and match single templates.
 
 In case of issues try to apply all transformations beforehand,
