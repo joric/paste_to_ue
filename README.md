@@ -20,7 +20,7 @@ Then you can select them, press Ctrl+Shift+C, and paste their transformations to
 
 Object matching algorithm currently uses weighted distances between a few points.
 Adjust delta to large value if objects don't match the template (e.g. set to 1).
-If it doesn't fix it, try separating different template types into different joined meshes.
+If it doesn't fix it, try separating large mesh into smaller meshes that contain only one template type.
 
 In case of issues try to apply all transformations beforehand,
 so objects have zero origin and zero rotations.
