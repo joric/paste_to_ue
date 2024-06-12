@@ -187,7 +187,7 @@ def copy_to_clipboard(self, blueprint, scale):
         #check for quaternion rotation
         r = o.rotation_quaternion.to_euler() if o.rotation_mode=='QUATERNION' else o.rotation_euler
         l = o.location
-        out = f'add("{blueprint}",{l.x*100,-l.y*100,l.z*100},{r.x,-r.y,-r.z})'
+        out = f'add("{blueprint}",{l.x*100,-l.y*100,l.z*100},{degrees(r.x),degrees(-r.y),degrees(-r.z)})'
 
         if scale > 0:
             s = o.scale
@@ -222,7 +222,7 @@ def register():
         name="Custom Radio Select"
     )
     bpy.types.Scene.custom_delta = bpy.props.FloatProperty(name="Delta", default=0.01)
-    bpy.types.Scene.use_scale = bpy.props.BoolProperty(name="Apply Scale", default=False)
+    bpy.types.Scene.use_scale = bpy.props.BoolProperty(name="Apply Scale", default=True)
     bpy.types.Scene.custom_scale = bpy.props.FloatProperty(name="Custom Scale", default=1)
     bpy.types.Scene.path_to_blueprint = bpy.props.StringProperty(name="Path", default="/Game/Items/BP_Item")
 
