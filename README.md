@@ -1,6 +1,6 @@
 ## Paste to UE
 
-Blender plugin to copy objects position (and transformations) from Blender to UE as blueprints
+Blender plugin to copy objects position (and transformations) from Blender to Unreal Engine as blueprints
 
 ### Installation
 
@@ -8,7 +8,26 @@ Download the latest release from the [releases](../../releases) section, install
 
 ### Usage
 
-Select objects, press Ctrl+Shift+C to copy objects data. You also can click "Object > Paste to UE" in menu. Clipboard Format:
+All actions are available from the tool panel (press N, select "Paste to UE" tab).
+
+#### Match Templates
+
+There's some work on point cloud matching for joined objects and mesh align.
+Select any objects in the scene (the largest will be cloud, the rest will be the templates),
+press "Create Instances" (formerly Ctrl+Shift+D) from the tool panel.
+It will find and create template instances with matching scaling/rotation.
+Then you can select them, press Ctrl+Shift+C, and paste their transformations to UE.
+
+Object matching algorithm currently uses weighted distances between a few points.
+Adjust delta to large value if objects don't match the template (e.g. set to 1).
+
+In case of issues try to apply all transformations beforehand,
+so objects have zero origin and zero rotations.
+
+#### Copy to Clipboard
+
+Select objects, press Ctrl+Shift+C to copy objects data. You also can click "Copy to Clipboard" in the tool panel.
+Clipboard Format:
 
 ```python
 eli,eal=unreal.EditorLevelLibrary,unreal.EditorAssetLibrary
@@ -20,16 +39,8 @@ add("/Game/Items/BP_Coin",(1,1,1),(2,2,2)).set_actor_scale3d(unreal.Vector{3,3,3
 ```
 
 Paste clipboard to the UE5 "Python" window (not REPL), it allows multiline text.
-You can also specify blueprint and scale in the popup menu.
-Scale needs to be bigger than 0 to apply scene scale, use with caution.
+You can also specify blueprint and scale in the toolbar (use with caution, scale is taken from the scene).
 You can also apply scale for all selected objects in UE without moving them by changing scale value in properties.
-
-### Mesh Separation
-
-There's some work on point cloud matching for joined objects and mesh align.
-Select any objects in the scene (the smallest will be a template, the next smallest will be searched),
-press Ctrl+Shift+D. It will find and create template instances with matching scaling/rotation.
-Then you can select them, press Ctrl+Shift+C, and paste them to UE.
 
 #### Video
 

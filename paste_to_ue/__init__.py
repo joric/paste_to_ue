@@ -1,7 +1,7 @@
 bl_info = {
     "name": "paste_to_ue",
     "author": "joric",
-    "version": (0, 1),
+    "version": (0, 2),
     "blender": (3, 6, 0),
     "category": "Object",
     "location": "View 3D > Object",
@@ -16,58 +16,78 @@ from math import *
 import mathutils
 from mathutils import *
 
-class MeshSeparation(bpy.types.Operator):
-    bl_idname = "object.debug_macro_paste_to_ue"
-    bl_label = "Mesh Separation"
-    bl_options = {'REGISTER', 'UNDO'}
+class CustomTabPanel1(bpy.types.Panel):
+    bl_label = "Match Templates"
+    bl_idname = "MY_PT_CustomTabPanel1"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Paste to UE'
 
-    delta: bpy.props.StringProperty(name="Delta (unused)", default="0.1")
+    def draw(self, context):
+        layout = self.layout
 
-    # mesh separation, template vs point cloud
-    def execute(self, context: bpy.context):
+        layout.prop(context.scene, "custom_delta")
+        layout.prop(context.scene, "custom_radio_selection", expand=True)
+
+        layout.operator("custom.button_operator1", text="Create Instances")
+
+class CustomTabPanel2(bpy.types.Panel):
+    bl_label = "Copy Transforms"
+    bl_idname = "MY_PT_CustomTabPanel2"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'Paste to UE'
+
+    def draw(self, context):
+        layout = self.layout
+
+        layout.prop(context.scene, "path_to_blueprint")
+        layout.prop(context.scene, "use_scale")
+        layout.prop(context.scene, "custom_scale")
+
+        layout.operator("custom.button_operator2", text="Copy to Clipboard")
+
+# Match Templates
+class CustomButtonOperator1(bpy.types.Operator):
+    bl_idname = "custom.button_operator1"
+    bl_label = "Custom Button"
+
+    def execute(self, context):
         import sys,imp
 
-        module = sys.modules['paste_to_ue']
-        imp.reload(module)
+        delta = context.scene.custom_delta
+        create_instances = context.scene.custom_radio_selection == 'INSTANCES'
 
         objects = []
+        meshes = []
 
         # collect points for every selected object
         for o in bpy.context.selected_objects:
-            if o.type != "MESH":
+            if o.type != 'MESH':
                 continue
 
+            meshes.append(o)
             points = []
             bpy.context.view_layer.objects.active = o
 
-            #for v in o.data.vertices:
-            #    points.append(v.co)
-
-            # need to collect points from face data here, or it doesn't match
+            # need to collect points from face data, or it doesn't match
             for face in o.data.polygons:
                 for idx in face.vertices:
                     points.append( o.data.vertices[idx].co )
 
             objects.append(points)
 
+        indices = list(range(len(objects)))
+        indices.sort(key = lambda i:len(objects[i]))
+        objects.sort(key=len)
+
         if len(objects)<2 or len(objects[0])<3 or len(objects[1])<3:
             self.report({'INFO'}, f'Too few objects selected, need two (template and cloud) with 3 points each, minimum.')
             return {'FINISHED'}
 
-        template, cloud = sorted(objects,key=len)[:2]
-        n,m = map(len,(template,cloud))
+        templates, cloud = objects[:-1], objects[-1]
 
-        self.report({'INFO'}, f'Collected points template:{n}, cloud: {m}, ratio: ({m/n})')
-
-        source_index = 0 if len(objects[0])<len(objects[1]) else 1
-        template_obj = bpy.context.selected_objects[source_index]
-
-        ofs = 0
-        while ofs+n <= m:
-            obj = bpy.data.objects.new(name=template_obj.name+'_instance', object_data=template_obj.data)
-            #obj = bpy.data.objects.new(name=template_obj.name+'_empty', object_data = None)
-            bpy.context.collection.objects.link(obj)
-
+        def align(template, cloud, ofs, obj, cloud_obj):
             source_points = template[:3]
             target_points = cloud[ofs:ofs+3]
 
@@ -95,10 +115,61 @@ class MeshSeparation(bpy.types.Operator):
             r.transpose()
 
             snap = obj.matrix_world.inverted() @ a[0]
-            obj.matrix_world = Matrix().Translation(r.to_translation() - r @ snap) @ r
+            offset = r.to_translation() - r @ snap
+            parent = cloud_obj.matrix_world
+
+            obj.matrix_world = parent @ Matrix().Translation(offset) @ r
+
+        # calculate distance from first to last point of the object
+        # then calculate distance from first to the middle point
+        # calculate weighted dist = half_dist / full_dist
+        # check if cloud dist match template dist within given delta
+        def match(template, cloud, ofs, delta):
+            n,m = map(len,(template,cloud))
+            if ofs+n > m:
+                return False
+            def calc_dist(points, ofs, n):
+                full_dist = (points[ofs]-points[ofs + n-1]).length
+                half_dist = (points[ofs]-points[ofs + n//2]).length
+                return half_dist / full_dist if full_dist else 0
+            return abs(calc_dist(template, 0, n) - calc_dist(cloud, ofs, n)) < delta
+
+        m = len(cloud)
+        self.report({'INFO'}, f'Collected cloud points {m}, matching against {len(templates)} templates...')
+
+        ofs = count = 0
+        while ofs < m:
+            n = 1
+            for i,template in enumerate(templates):
+
+                if match(template, cloud, ofs, delta):
+                    template_obj, cloud_obj = meshes[indices[i]], meshes[indices[-1]]
+
+                    if create_instances:
+                        obj = bpy.data.objects.new(name=template_obj.name+'_instance', object_data=template_obj.data)
+                    else:
+                        bpy.data.objects.new(name=template_obj.name+'_empty', object_data = None)
+                    bpy.context.collection.objects.link(obj)
+
+                    align(template, cloud, ofs, obj, cloud_obj)
+                    n = len(template)
+                    count += 1
 
             ofs += n
 
+        self.report({'INFO'}, f'Matching finished, created {count} instances.')
+
+
+        return {'FINISHED'}
+
+# Paste to Clipboard
+class CustomButtonOperator2(bpy.types.Operator):
+    bl_idname = "custom.button_operator2"
+    bl_label = "Custom Button 2"
+
+    def execute(self, context):
+        copy_to_clipboard(self, context.scene.path_to_blueprint, context.scene.custom_scale if context.scene.use_scale else 0)
+        self.report({'INFO'}, "Copied to clipboard.")
         return {'FINISHED'}
 
 def copy_to_clipboard(self, blueprint, scale):
@@ -131,46 +202,42 @@ add=lambda bp,v,r:eli.spawn_actor_from_class(load(bp),unreal.Vector(*v),unreal.R
 
     self.report({'INFO'}, f"{len(actors)} UE Object(s) Copied to Clipboard")
 
-class PasteToUE(bpy.types.Operator):
-    bl_idname = "object.paste_to_ue"
-    bl_label = "Paste to UE"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    blueprint: bpy.props.StringProperty(name="Path to Blueprint", default="/Game/Items/BP_Item")
-    scale: bpy.props.FloatProperty(name="Scale (0 is default)", default=0)
-
-    def execute(self, context):
-        copy_to_clipboard(self, self.blueprint, self.scale)
-        return {'FINISHED'}
-
-def menu_func(self, context):
-    self.layout.operator(PasteToUE.bl_idname)
-
 def register():
-    bpy.utils.register_class(PasteToUE)
-    bpy.types.VIEW3D_MT_object.append(menu_func)
     # handle the keymap
     wm = bpy.context.window_manager
-
-    bpy.utils.register_class(MeshSeparation)
-
     if wm.keyconfigs.addon:
         km = wm.keyconfigs.addon.keymaps.new(name="Window", space_type='EMPTY')
-        kmi = km.keymap_items.new(MeshSeparation.bl_idname, 'D', 'PRESS', ctrl=True, shift=True)
-        kmi = km.keymap_items.new(PasteToUE.bl_idname, 'C', 'PRESS', ctrl=True, shift=True)
+        #kmi = km.keymap_items.new(CustomButtonOperator1.bl_idname, 'D', 'PRESS', ctrl=True, shift=True)
+        kmi = km.keymap_items.new(CustomButtonOperator2.bl_idname, 'C', 'PRESS', ctrl=True, shift=True)
         addon_keymaps.append((km, kmi))
 
+    bpy.utils.register_class(CustomTabPanel1)
+    bpy.utils.register_class(CustomTabPanel2)
+    bpy.utils.register_class(CustomButtonOperator1)
+    bpy.utils.register_class(CustomButtonOperator2)
+
+    bpy.types.Scene.custom_radio_selection = bpy.props.EnumProperty(
+        items=[('INSTANCES', 'Instance', 'Create instances'),
+               ('EMPTY', 'Empty', 'Create empty objects')],
+        name="Custom Radio Select"
+    )
+    bpy.types.Scene.custom_delta = bpy.props.FloatProperty(name="Delta", default=0.1)
+    bpy.types.Scene.use_scale = bpy.props.BoolProperty(name="Apply Scale", default=False)
+    bpy.types.Scene.custom_scale = bpy.props.FloatProperty(name="Custom Scale", default=1)
+    bpy.types.Scene.path_to_blueprint = bpy.props.StringProperty(name="Path", default="/Game/Items/BP_Item")
+
 def unregister():
-    bpy.utils.unregister_class(PasteToUE)
-    bpy.types.VIEW3D_MT_object.remove(menu_func)
-
-
-    bpy.utils.unregister_class(MeshSeparation)
 
     # handle the keymap
     for km, kmi in addon_keymaps:
         km.keymap_items.remove(kmi)
     del addon_keymaps[:]
+
+    bpy.utils.unregister_class(CustomTabPanel1)
+    bpy.utils.unregister_class(CustomTabPanel2)
+    bpy.utils.unregister_class(CustomButtonOperator1)
+    bpy.utils.unregister_class(CustomButtonOperator2)
+    del bpy.types.Scene.custom_text_input
 
 if __name__ == "__main__":
     register()
