@@ -207,7 +207,7 @@ def register():
     wm = bpy.context.window_manager
     if wm.keyconfigs.addon:
         km = wm.keyconfigs.addon.keymaps.new(name="Window", space_type='EMPTY')
-        #kmi = km.keymap_items.new(CustomButtonOperator1.bl_idname, 'D', 'PRESS', ctrl=True, shift=True)
+        kmi = km.keymap_items.new(CustomButtonOperator1.bl_idname, 'D', 'PRESS', ctrl=True, shift=True)
         kmi = km.keymap_items.new(CustomButtonOperator2.bl_idname, 'C', 'PRESS', ctrl=True, shift=True)
         addon_keymaps.append((km, kmi))
 

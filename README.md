@@ -14,7 +14,7 @@ All actions are available from the tool panel (press N, select "Paste to UE" tab
 
 There's some work on point cloud matching for joined objects and mesh align.
 Select any objects in the scene (the largest will be cloud, the rest will be the templates),
-press "Create Instances" (formerly Ctrl+Shift+D) from the tool panel.
+press "Create Instances" from the tool panel (or press Ctrl+Shift+D).
 It will find and create template instances with matching scaling/rotation.
 Then you can select them, press Ctrl+Shift+C, and paste their transformations to UE.
 
@@ -24,7 +24,7 @@ Adjust delta to large value if objects don't match the template (e.g. set to 1).
 In case of issues try to apply all transformations beforehand,
 so objects have zero origin and zero rotations.
 
-#### Copy to Clipboard
+#### Copy Transforms
 
 Select objects, press Ctrl+Shift+C to copy objects data. You also can click "Copy to Clipboard" in the tool panel.
 Clipboard Format:
