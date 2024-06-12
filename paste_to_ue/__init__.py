@@ -148,7 +148,7 @@ class CustomButtonOperator1(bpy.types.Operator):
                     if create_instances:
                         obj = bpy.data.objects.new(name=template_obj.name+'_instance', object_data=template_obj.data)
                     else:
-                        bpy.data.objects.new(name=template_obj.name+'_empty', object_data = None)
+                        obj = bpy.data.objects.new(name=template_obj.name+'_empty', object_data = None)
                     bpy.context.collection.objects.link(obj)
 
                     align(template, cloud, ofs, obj, cloud_obj)
