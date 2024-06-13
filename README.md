@@ -48,6 +48,8 @@ You can also apply scale for all selected objects in UE without moving them by c
 
 [![](http://img.youtube.com/vi/lSLK26Li14w/hqdefault.jpg)](https://youtu.be/lSLK26Li14w)
 
+[![](http://img.youtube.com/vi/Gx81sG9M7Q8/hqdefault.jpg)](https://youtu.be/Gx81sG9M7Q8)
+
 ### References
 
 * https://github.com/joric/io_scene_b3d Blitz3d import plugin
