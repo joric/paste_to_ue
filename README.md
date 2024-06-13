@@ -13,6 +13,8 @@ All actions are available from the tool panel (press N, select "Paste to UE" tab
 #### Auto Mesh Separation
 
 Experimental function, splits mesh into templates and instances with a single button.
+Depends on a Blender built-in function "split by loose geometry" so may be unreliable.
+Match Templates is recommended.
 
 #### Match Templates
 
