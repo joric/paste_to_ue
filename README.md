@@ -10,9 +10,12 @@ Download the latest release from the [releases](../../releases) section, install
 
 All actions are available from the tool panel (press N, select "Paste to UE" tab).
 
+#### Auto Mesh Separation
+
+Experimental function, splits mesh into templates and instances with a single button.
+
 #### Match Templates
 
-There's some work on point cloud matching for joined objects and mesh align.
 Select any objects in the scene (the largest will be cloud, the rest will be the templates),
 press "Create Instances" from the tool panel (or press Ctrl+Shift+D).
 It will find and create template instances with matching scaling/rotation.
