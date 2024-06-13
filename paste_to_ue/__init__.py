@@ -124,22 +124,34 @@ def create_templates():
     return templates
 
 def make_instances():
-    # input - selected objects, templates should have zero translation
+    # input - selected objects
+    # templates are either selected last or have 'template' in name
+
     templates = []
-    for o in bpy.context.selected_objects:
-        if o.location == Vector((0,0,0)):
-            templates.append(o)
+    last_object = None
+    if not templates:
+        for o in bpy.context.selected_objects:
+            last_object = o
+            if 'template' in o.name:
+                templates.append(o)
+
+    if not templates:
+        templates.append(last_object)
 
     instances = []
     for template_obj in templates:
         template = get_points(template_obj)
+
         for o in bpy.context.selected_objects:
             if o == template_obj:
                 continue
+
             cloud_obj = o
             cloud = get_points(cloud_obj)
+
             if len(cloud) != len(template):
                 continue
+
             obj = bpy.data.objects.new(name=template_obj.name+'_instance', object_data=template_obj.data)
             bpy.context.collection.objects.link(obj)
             align(template, cloud, 0, obj, cloud_obj)
