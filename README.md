@@ -14,7 +14,7 @@ All actions are available from the tool panel (press N, select "Paste to UE" tab
 
 Experimental function, splits mesh into templates and instances with a single button.
 Depends on a Blender built-in function "split by loose parts" that changes topology
-so may be unreliable (objects rotation may be off). "Match Templates" is more accurate.
+so may be unreliable (rotation may be off). "Match Templates" is more accurate.
 
 #### Match Templates
 
