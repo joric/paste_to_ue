@@ -18,7 +18,7 @@ so may be unreliable (objects rotation may be off). "Match Templates" is more ac
 
 #### Match Templates
 
-Prepare templates, select all objects in the scene (the largest will be cloud,
+Prepare templates, select all related objects (the largest will be cloud,
 the rest will be the templates), press "Create Instances" from the tool panel (or press Ctrl+Shift+D).
 It will find and create template instances with matching scaling/rotation.
 
