@@ -414,7 +414,7 @@ def register():
     )
     bpy.types.Scene.custom_delta = bpy.props.FloatProperty(name="Delta", default=0.01)
     bpy.types.Scene.use_scale = bpy.props.BoolProperty(name="Apply Scale", default=True)
-    bpy.types.Scene.custom_scale = bpy.props.FloatProperty(name="Custom Scale", default=1)
+    bpy.types.Scene.custom_scale = bpy.props.FloatProperty(name="Scale Multiplier", default=1)
     bpy.types.Scene.path_to_blueprint = bpy.props.StringProperty(name="Path", default="/Game/Items/BP_Item")
 
 def unregister():
