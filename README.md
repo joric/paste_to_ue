@@ -22,7 +22,7 @@ Prepare templates, select all related objects (the largest will be cloud,
 the rest will be the templates), press "Create Instances" from the tool panel (or press Ctrl+Shift+D).
 It will find and create template instances with matching scaling/rotation.
 
-Object matching algorithm currently uses weighted distances between the object's points.
+Object matching algorithm currently uses weighted distance between the points.
 Adjust delta to large value if objects don't match the templates (e.g. set to 1).
 If it doesn't fix it, try separating the large mesh into smaller meshes
 by template type and match single templates.
