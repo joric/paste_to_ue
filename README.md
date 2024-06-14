@@ -21,7 +21,6 @@ so may be unreliable (objects rotation may be off). "Match Templates" is more ac
 Prepare templates, select all objects in the scene (the largest will be cloud,
 the rest will be the templates), press "Create Instances" from the tool panel (or press Ctrl+Shift+D).
 It will find and create template instances with matching scaling/rotation.
-Then you can select them, press Ctrl+Shift+C, and paste their transformations to UE.
 
 Object matching algorithm currently uses weighted distances between the object's points.
 Adjust delta to large value if objects don't match the templates (e.g. set to 1).
