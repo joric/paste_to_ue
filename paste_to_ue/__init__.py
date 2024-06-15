@@ -207,9 +207,9 @@ class CustomTabPanel4(bpy.types.Panel):
     def draw(self, context):
         layout = self.layout
         layout.operator("custom.button_operator4", text="Break Mesh")
-        layout.operator("custom.button_operator5", text="Create Templates")
+        layout.operator("custom.button_operator5", text="Find Templates")
         #layout.operator("custom.button_operator6", text="Create Instances")
-        layout.operator("custom.button_operator7", text="Make Instances")
+        layout.operator("custom.button_operator7", text="Create Instances")
 
 # Auto Mesh Separation
 class CustomButtonOperator3(bpy.types.Operator):
