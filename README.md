@@ -16,10 +16,6 @@ Experimental function, splits mesh into templates and instances with a single bu
 Depends on a Blender's built-in function "split by loose parts" that changes topology
 so it may be unreliable (e.g. rotation may be off). "Match Templates" is more accurate.
 
-##### Video
-
-[![](http://img.youtube.com/vi/Gx81sG9M7Q8/hqdefault.jpg)](https://youtu.be/Gx81sG9M7Q8)
-
 #### Match Templates
 
 Prepare templates, select all related objects (the largest will be cloud,
