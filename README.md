@@ -16,6 +16,10 @@ Experimental function, splits mesh into templates and instances with a single bu
 Depends on a Blender's built-in function "split by loose parts" that changes topology
 so it may be unreliable (e.g. rotation may be off). "Match Templates" is more accurate.
 
+##### Video
+
+[![](http://img.youtube.com/vi/Gx81sG9M7Q8/hqdefault.jpg)](https://youtu.be/Gx81sG9M7Q8)
+
 #### Match Templates
 
 Prepare templates, select all related objects (the largest will be cloud,
@@ -26,6 +30,10 @@ Object matching algorithm currently uses weighted distance between the points.
 Adjust delta to large value if objects don't match the templates (e.g. set to 1).
 If it doesn't fix it, try separating the large mesh into smaller meshes
 by template type and match single templates.
+
+##### Video
+
+[![](http://img.youtube.com/vi/lSLK26Li14w/hqdefault.jpg)](https://youtu.be/lSLK26Li14w)
 
 #### Copy Transforms
 
@@ -44,12 +52,6 @@ add("/Game/Items/BP_Coin",(1,1,1),(2,2,2)).set_actor_scale3d(unreal.Vector{3,3,3
 Paste clipboard to the UE5 "Python" window (not REPL), it allows multiline text.
 You can also specify blueprint and scale in the toolbar (use with caution, scale is taken from the scene).
 You can also apply scale for all selected objects in UE without moving them by changing scale value in properties.
-
-#### Video
-
-[![](http://img.youtube.com/vi/lSLK26Li14w/hqdefault.jpg)](https://youtu.be/lSLK26Li14w)
-
-[![](http://img.youtube.com/vi/Gx81sG9M7Q8/hqdefault.jpg)](https://youtu.be/Gx81sG9M7Q8)
 
 ### References
 
