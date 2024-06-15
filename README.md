@@ -56,3 +56,6 @@ You can also apply scale for all selected objects in UE without moving them by c
 * https://www.sidefx.com/forum/topic/58153/ 3 point align of 2 similar meshes (like in Maya)
 * https://github.com/egtwobits/mesh_mesh_align_plus Mesh Align Plus
 * https://blenderartists.org/t/how-to-calculate-rotation-for-mesh2-based-on-identical-mesh1-and-its-local-vertices-data/1329857/5
+* https://nghiaho.com/?page_id=671 Finding optimal rotation and translation between corresponding 3d points
+* https://gist.github.com/nh2/bc4e2981b0e213fefd4aaa33edfb3893 rigid-transform-with-scale.py
+
